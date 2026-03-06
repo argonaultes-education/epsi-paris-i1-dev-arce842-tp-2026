@@ -1,4 +1,5 @@
 import random
+import datetime
 
 class StatsDisplay:
     
@@ -37,5 +38,11 @@ class WeatherStation:
         current_humidity = self.get_humidity()
         
         self.__stats_display.display(current_temp, current_pressure, current_humidity)
-        self.__avg_temp_display(current_temp)
+        self.__avg_temp_display.average_temp(current_temp)
         
+if __name__ == '__main__':
+    weather_station = WeatherStation(StatsDisplay(), AverageTempDisplay())
+    
+    for _ in range(10):
+        print(datetime.datetime.now())
+        weather_station.update_measures()
