@@ -28,6 +28,16 @@ class AverageTempDisplay(AbstractDisplay):
     def display(self, temperature, pressure, humidity):
         self.average_temp(temperature)
 
+class MaxPressureDisplay(AbstractDisplay):
+    
+    def __init__(self):
+        self.__max_pressure = 0
+        
+    def display(self, temperature, pressure, humidity):
+        if self.__max_pressure < pressure:
+            self.__max_pressure = pressure
+        print(f'Max pressure: {self.__max_pressure}')
+
 class WeatherStation:
     
     def __init__(self):
@@ -46,6 +56,9 @@ class WeatherStation:
     def get_humidity(self):
         return random.randint(0, 100)
     
+    def get_pm(self):
+        return random.randint(0, 1000)
+    
     def update_measures(self):
         current_temp = self.get_temperature()
         current_pressure = self.get_pressure()
@@ -58,6 +71,7 @@ if __name__ == '__main__':
     weather_station = WeatherStation()
     weather_station.add_display(StatsDisplay())
     weather_station.add_display(AverageTempDisplay())
+    weather_station.add_display(MaxPressureDisplay())
     
     for _ in range(10):
         print(datetime.datetime.now())
