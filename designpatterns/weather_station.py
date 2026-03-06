@@ -1,12 +1,20 @@
 import random
 import datetime
+from abc import ABC, abstractmethod
 
-class StatsDisplay:
+class AbstractDisplay(ABC):
+    
+    @abstractmethod
+    def display(self, temperature, pressure, humidy):
+        ...
+    
+
+class StatsDisplay(AbstractDisplay):
     
     def display(self, temperature, pressure, humidity):
         print(f'{temperature} | {pressure} | {humidity}')
         
-class AverageTempDisplay:
+class AverageTempDisplay(AbstractDisplay):
     
     def __init__(self):
         self.__accu_temp = 0
@@ -16,12 +24,18 @@ class AverageTempDisplay:
         self.__accu_temp += temperature
         self.__nb_temp += 1
         print(f'avg temp {self.__accu_temp / self.__nb_temp}')
+        
+    def display(self, temperature, pressure, humidity):
+        self.average_temp(temperature)
 
 class WeatherStation:
     
-    def __init__(self, stats_display:StatsDisplay, average_temp_display:AverageTempDisplay):
-        self.__stats_display = stats_display
-        self.__avg_temp_display = average_temp_display
+    def __init__(self):
+        self.__displays = []
+        
+    def add_display(self, display:AbstractDisplay):
+        if isinstance(display, AbstractDisplay):
+            self.__displays.append(display)
     
     def get_temperature(self):
         return random.randint(-50, 50)
@@ -36,12 +50,14 @@ class WeatherStation:
         current_temp = self.get_temperature()
         current_pressure = self.get_pressure()
         current_humidity = self.get_humidity()
-        
-        self.__stats_display.display(current_temp, current_pressure, current_humidity)
-        self.__avg_temp_display.average_temp(current_temp)
+
+        for display in self.__displays:
+            display.display(current_temp, current_pressure, current_humidity)
         
 if __name__ == '__main__':
-    weather_station = WeatherStation(StatsDisplay(), AverageTempDisplay())
+    weather_station = WeatherStation()
+    weather_station.add_display(StatsDisplay())
+    weather_station.add_display(AverageTempDisplay())
     
     for _ in range(10):
         print(datetime.datetime.now())
