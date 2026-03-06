@@ -79,6 +79,7 @@ if __name__ == '__main__':
     green_duck.quack()
     green_duck.set_fly_behavior(FlyBackward)
     green_duck.fly()
+
     
     mallard = MallardDuck()
     mallard.display()
