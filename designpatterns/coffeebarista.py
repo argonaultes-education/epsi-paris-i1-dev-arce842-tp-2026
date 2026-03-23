@@ -8,6 +8,7 @@ class Beverage(ABC):
     def __init__(self):
         self.milk = False
         self.sugar = False
+        self.cookies = False
         
         
     def add_milk(self):
@@ -15,6 +16,9 @@ class Beverage(ABC):
         
     def add_sugar(self):
         self.sugar = True
+        
+    def add_cookies(self):
+        self.cookies = True
     
     def cost(self):
         total_cost = 0
@@ -22,6 +26,8 @@ class Beverage(ABC):
             total_cost += 0.5
         if self.sugar:
             total_cost += 0.4
+        if self.cookies:
+            total_cost += 0.64
         return total_cost
 
 # base cost: 1        
