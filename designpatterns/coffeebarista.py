@@ -6,11 +6,11 @@ from abc import ABC, abstractmethod
 class Beverage(ABC):
     
     def __init__(self):
-        ...
+        self.milk = False
         
         
     def add_milk(self):
-        ...
+        self.milk = True
         
     def add_sugar(self):
         ...
@@ -22,11 +22,15 @@ class Beverage(ABC):
 # base cost: 1        
 class Coffee(Beverage):
     
+    def __init__(self):
+        super().__init__()
+    
     def add_coffee(self):
         ...
     
     def cost(self):
-        ...    
+        if self.milk:
+            ...   
 
 # base cost: 1.5    
 class Tea(Beverage):
