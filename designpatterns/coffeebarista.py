@@ -16,9 +16,13 @@ class Beverage(ABC):
     def add_sugar(self):
         self.sugar = True
     
-    @abstractmethod
     def cost(self):
-        ...
+        total_cost = 0
+        if self.milk:
+            total_cost += 0.5
+        if self.sugar:
+            total_cost += 0.4
+        return total_cost
 
 # base cost: 1        
 class Coffee(Beverage):
@@ -31,11 +35,7 @@ class Coffee(Beverage):
         self.coffee_bean = True
     
     def cost(self):
-        total_cost = 1.0
-        if self.milk:
-            total_cost += 0.5
-        if self.sugar:
-            total_cost += 0.4
+        total_cost = 1.0 + super().cost()
         if self.coffee_bean:
             total_cost += 0.2
         return total_cost
@@ -47,11 +47,7 @@ class Tea(Beverage):
         super().__init__()
         
     def cost(self):
-        total_cost = 1.5
-        if self.milk:
-            total_cost += 0.5
-        if self.sugar:
-            total_cost += 0.4
+        total_cost = 1.5 + super().cost()
         return total_cost
         
 # base cost: 0.7
@@ -65,11 +61,7 @@ class Chocolate(Beverage):
         self.sha = True
 
     def cost(self):
-        total_cost = 0.7
-        if self.milk:
-            total_cost += 0.5
-        if self.sugar:
-            total_cost += 0.4
+        total_cost = 0.7 + super().cost()
         if self.sha:
             total_cost += 0.5
         return total_cost
@@ -85,20 +77,16 @@ class Latte(Beverage):
         self.sha = True
 
     def cost(self):
-        total_cost = 2.0
-        if self.milk:
-            total_cost += 0.5
-        if self.sugar:
-            total_cost += 0.4
+        total_cost = 2.0 + super().cost()
         if self.sha:
             total_cost += 0.5
         return total_cost    
     
 if __name__ == '__main__':
     c = Coffee()
-    print(c.cost())
+    print(f'Coffee dark {c.cost()}')
     c.add_sugar()
-    print(c.cost())
+    print(f'Coffee sugar {c.cost()}')
     tea = Tea()
     tea.add_milk()
-    print(tea.cost())
+    print(f'Tea light {tea.cost()}')
