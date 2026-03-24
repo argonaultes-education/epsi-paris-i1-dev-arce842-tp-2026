@@ -1,4 +1,4 @@
-from strategy_duck import Duck
+from strategy_duck import Duck, FlyBehavior, QuackBehavior
 
 class DuckSimulator:
     
@@ -22,17 +22,45 @@ class Goose:
     def fly(self):
         print('Fly like a goose')
         
-    def quack(self):
-        self.honk()
+    # def quack(self):
+    #     self.honk()
 
 # Adapter
-class DuckDisguise(Duck):
+class DuckDisguiseGreen(Duck):
 
     def __init__(self, goose : Goose):
+        super().__init__(None, None)
         self.goose = goose
 
+    def fly(self):
+        self.goose.fly()
+        
+    def quack(self):
+        self.goose.honk()
+
+class GooseFly(FlyBehavior):
+    
+    def __init__(self, goose : Goose):
+        self.goose = goose
+        
+    def fly(self):
+        self.goose.fly()
+        
+class GooseQuack(QuackBehavior):
+    
+    def __init__(self, goose : Goose):
+        self.goose = goose
+        
+    def quack(self):
+        self.goose.honk()
+
+class DuckDisguiseBanana(Duck):
+    
+    def __init__(self, goose : Goose):
+        super().__init__(GooseFly(goose), GooseQuack(goose))
 
 if __name__ == '__main__':
     goose = Goose()
     simulator = DuckSimulator()
-    simulator.simulate(DuckDisguise(goose))
+    simulator.simulate(DuckDisguiseGreen(goose))
+    simulator.simulate(DuckDisguiseBanana(goose))
