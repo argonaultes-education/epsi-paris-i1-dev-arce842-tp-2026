@@ -1,5 +1,6 @@
 from strategy_duck import Duck, FlyBehavior, QuackBehavior
 from strategy_duck import GreenDuck, MallardDuck, OtherDuck
+from strategy_duck import add_quack_counter_feature, add_quack_counter_feature_v2, add_fly_counter
 
 class DuckSimulator:
     
@@ -60,15 +61,69 @@ class DuckDisguiseBanana(Duck):
     def __init__(self, goose : Goose):
         super().__init__(GooseFly(goose), GooseQuack(goose))
 
+# def / return ??
+# class
+# Decorator Quack Counter
+class QuackCounter(Duck):
+    
+    def __init__(self, duck : Duck):
+        super().__init__(duck._Duck__fly_behavior, duck._Duck__quack_behavior)
+        self.__duck = duck
+        self.__counter = 0
+        
+    def quack(self):
+        self.__duck.quack()
+        self.__counter += 1
+        
+    @property
+    def counter(self):
+        return self.__counter
+
+class QuackCounterBehavior(QuackBehavior):
+    
+    def __init__(self, duck_quack : QuackBehavior):
+        self.__duck_quack = duck_quack
+        self.__counter = 0
+    
+    def quack(self):
+        self.__duck_quack.quack()
+        self.__counter += 1
+        
+    @property
+    def counter(self):
+        return self.__counter
+
+class QuackCounterV2(Duck):
+    
+    def __init__(self, duck : Duck):    
+        super().__init__(duck._Duck__fly_behavior,
+                         QuackCounterBehavior(duck._Duck__quack_behavior))
+        self.__duck = duck
+        
+    @property
+    def counter(self):
+        return self._Duck__quack_behavior.counter
+
+
+
 if __name__ == '__main__':
     goose = Goose()
     donald = GreenDuck()
     fifi = MallardDuck()
     leonardo = OtherDuck()
     simulator = DuckSimulator()
-    simulator.simulate(DuckDisguiseGreen(goose))
-    simulator.simulate(DuckDisguiseBanana(goose))
+    # simulator.simulate(DuckDisguiseGreen(goose))
+    # simulator.simulate(DuckDisguiseBanana(goose))
+    fifi = QuackCounter(fifi)
     simulator.simulate(fifi)
-    simulator.simulate(leonardo)
-    simulator.simulate(leonardo)
+    simulator.simulate(fifi)
+    leonardo = QuackCounterV2(leonardo)
+    for _ in range(10):
+        simulator.simulate(donald)
+    # simulator.simulate(leonardo)
+    # simulator.simulate(leonardo)
     # display the number of times a duck quacked
+    # add_quack_counter_feature(donald)
+    print(f'Counter donald: {donald.counter}')
+    print(f'Counter fifi: {fifi.counter}')
+    print(f'Counter leonardo: {leonardo.counter}')

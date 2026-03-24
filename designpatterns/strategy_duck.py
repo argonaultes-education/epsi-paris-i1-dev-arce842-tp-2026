@@ -56,21 +56,37 @@ class Duck(ABC):
     def quack(self):
         self.__quack_behavior.quack()
 
-    
+def add_quack_counter_feature(duck : Duck) -> None:
+    if 'counter' in duck.__dict__:
+        duck.counter += 1
+    else:
+        duck.counter = 0
+      
+def add_quack_counter_feature_v2(duck : Duck) -> Duck:
+    add_quack_counter_feature(duck)
+    return duck
+
+def add_fly_counter(duck : Duck) -> Duck:
+    return duck
+
+@add_quack_counter_feature_v2
 class GreenDuck(Duck):
     
     def __init__(self):
         super().__init__(fly_behavior=FlyToTheMoon, quack_behavior=QuackQuack())
-    
+
 class MallardDuck(Duck):
 
     def __init__(self):
         super().__init__(fly_behavior=FlyBackward, quack_behavior=SmallQuack())
 
+
 class OtherDuck(Duck):
 
     def __init__(self):
         super().__init__(fly_behavior=FlyToTheMoon, quack_behavior=SmallQuack())
+
+
 
 if __name__ == '__main__':
     green_duck = GreenDuck()
