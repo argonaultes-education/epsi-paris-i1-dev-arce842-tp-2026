@@ -1,4 +1,5 @@
 from strategy_duck import Duck, FlyBehavior, QuackBehavior
+from strategy_duck import GreenDuck, MallardDuck, OtherDuck
 
 class DuckSimulator:
     
@@ -61,6 +62,13 @@ class DuckDisguiseBanana(Duck):
 
 if __name__ == '__main__':
     goose = Goose()
+    donald = GreenDuck()
+    fifi = MallardDuck()
+    leonardo = OtherDuck()
     simulator = DuckSimulator()
     simulator.simulate(DuckDisguiseGreen(goose))
     simulator.simulate(DuckDisguiseBanana(goose))
+    simulator.simulate(fifi)
+    simulator.simulate(leonardo)
+    simulator.simulate(leonardo)
+    # display the number of times a duck quacked
