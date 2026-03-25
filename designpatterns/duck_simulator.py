@@ -1,5 +1,6 @@
 from strategy_duck import Duck, FlyBehavior, QuackBehavior
 from strategy_duck import GreenDuck, MallardDuck, OtherDuck
+from strategy_duck import Quackologist
 from abc import ABC, abstractmethod
 
 class DuckSimulator:
@@ -104,28 +105,22 @@ class QuackCounterV2(Duck):
     def counter(self):
         return self._Duck__quack_behavior.counter
 
-class Observer(ABC):
-    
-    @abstractmethod
-    def notify(self, subject):
-        ...
-
-class Quackologist(Observer):
-    
-    def __init__(self):
-        self.__total_quacks = 0
-    
-    def notify(self, subject):
-        print('#TODO')
 
 if __name__ == '__main__':
+    tarzan = Quackologist()
+    print(f'tarzan heared {tarzan.total_quacks}')
     goose = Goose()
+    not_a_goose = DuckDisguiseBanana(goose)
+    not_a_goose.add_observer(tarzan)
     donald = GreenDuck()
+    donald.add_observer(tarzan)
     fifi = MallardDuck()
+    fifi.add_observer(tarzan)
     leonardo = OtherDuck()
+    leonardo.add_observer(tarzan)
     simulator = DuckSimulator()
     # simulator.simulate(DuckDisguiseGreen(goose))
-    # simulator.simulate(DuckDisguiseBanana(goose))
+    simulator.simulate(not_a_goose)
     fifi = QuackCounter(fifi)
     simulator.simulate(fifi)
     simulator.simulate(fifi)
@@ -139,3 +134,4 @@ if __name__ == '__main__':
     print(f'Counter donald: {donald.counter}')
     print(f'Counter fifi: {fifi.counter}')
     print(f'Counter leonardo: {leonardo.counter}')
+    print(f'tarzan heared {tarzan.total_quacks}')

@@ -35,8 +35,41 @@ class FlyBackward(FlyBehavior):
         print('Backward flying')
 
 def add_publisher_feature(cls):
-    #TODO: review quack
-    return cls
+    class DuckSubject(cls):
+        def __init__(self, fly_behavior:FlyBehavior, quack_behavior:QuackBehavior):
+            super().__init__(fly_behavior, quack_behavior)
+            self.__observers = []
+        
+        def add_observer(self, observer):
+            self.__observers.append(observer)
+        
+        def __notify(self):
+            for observer in self.__observers:
+                observer.notify()
+            
+        def quack(self):
+            super().quack()
+            self.__notify()
+            
+    return DuckSubject
+
+class DuckObserver(ABC):
+    
+    @abstractmethod
+    def notify(self):
+        ...
+        
+class Quackologist(DuckObserver):
+    
+    def __init__(self):
+        self.__total_quack_counter = 0
+    
+    def notify(self):
+        self.__total_quack_counter += 1
+        
+    @property
+    def total_quacks(self):
+        return self.__total_quack_counter
 
 @add_publisher_feature
 class Duck(ABC):
